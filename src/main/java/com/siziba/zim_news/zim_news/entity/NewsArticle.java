@@ -1,6 +1,6 @@
 package com.siziba.zim_news.zim_news.entity;
 
-
+import com.siziba.zim_news.zim_news.type.NewsArticleCategory;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -19,29 +18,26 @@ import java.util.UUID;
 public class NewsArticle {
     @Id
     @GeneratedValue
-    public UUID id;
+    private UUID id;
 
-    public String title;
+    private Long views;
+    private String title;
+    private String extract;
+    private String articleUrl;
+    private String author;
+    private String pictureUrl;
+    private java.sql.Date publishedAt;
 
-    public String extract;
-
-    public String url;
-
-    public Long views;
-
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "image_id", referencedColumnName = "id")
-    public FileStorage image;
+    @Enumerated(EnumType.STRING)
+    private NewsArticleCategory category;
 
     @ManyToOne
     @JoinColumn(name = "publication_id", referencedColumnName = "id")
     private Publication publication;
 
-    public Date date;
+    @CreationTimestamp
+    private java.sql.Timestamp createdAt;
 
     @CreationTimestamp
-    public java.sql.Timestamp createdAt;
-
-    @CreationTimestamp
-    public java.sql.Timestamp updatedAt;
+    private java.sql.Timestamp updatedAt;
 }

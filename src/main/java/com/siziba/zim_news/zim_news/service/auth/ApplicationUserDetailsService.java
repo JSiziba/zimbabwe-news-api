@@ -5,6 +5,7 @@ import com.siziba.zim_news.zim_news.entity.ApplicationUser;
 import com.siziba.zim_news.zim_news.exception.CustomServiceException;
 import com.siziba.zim_news.zim_news.library.CommonFunctions;
 import com.siziba.zim_news.zim_news.repository.ApplicationUserRepository;
+import com.siziba.zim_news.zim_news.type.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -130,8 +131,17 @@ public class ApplicationUserDetailsService {
         String email = principal.getName();
         return applicationUserRepository.findByEmail(email)
                 .orElseThrow(() ->  CustomServiceException.builder()
-                        .message("An authenticated user is required to perform this action")
+                        .message("User not found")
                         .errorCode(HttpStatus.FORBIDDEN)
                         .build());
+    }
+    public boolean isAdmin(Principal user, Role role) {
+        log.info("ApplicationUserDetailsService/checkIfUserHasRole");
+        ApplicationUser applicationUser = this.getUserDetailsByPrincipal(user);
+        return applicationUser.getRole().equals(role);
+    }
+    public boolean isAdmin(ApplicationUser user, Role role) {
+        log.info("ApplicationUserDetailsService/checkIfUserHasRole");
+        return user.getRole().equals(role);
     }
 }
