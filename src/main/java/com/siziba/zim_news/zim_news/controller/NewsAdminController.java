@@ -16,6 +16,9 @@ import com.siziba.zim_news.zim_news.exception.CustomServiceException;
 import com.siziba.zim_news.zim_news.service.auth.ApplicationUserDetailsService;
 import com.siziba.zim_news.zim_news.service.news.NewsAdminService;
 import com.siziba.zim_news.zim_news.type.Role;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,7 +32,9 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/news")
+@RequestMapping("/api/v1/news-admin")
+@Tag(name = "NewsAdmin", description = "News Admin API")
+@SecurityRequirement(name = "bearerAuth")
 public class NewsAdminController {
     private final NewsAdminService newsAdminService;
     private final ApplicationUserDetailsService applicationUserDetailsService;

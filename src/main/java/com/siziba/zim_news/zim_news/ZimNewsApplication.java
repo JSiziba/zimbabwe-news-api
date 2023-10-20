@@ -3,6 +3,9 @@ package com.siziba.zim_news.zim_news;
 import com.siziba.zim_news.zim_news.entity.ApplicationUser;
 import com.siziba.zim_news.zim_news.repository.ApplicationUserRepository;
 import com.siziba.zim_news.zim_news.type.Role;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,6 +14,13 @@ import org.springframework.context.annotation.Bean;
 
 @Slf4j
 @SpringBootApplication
+@SecurityScheme(
+		name = "bearerAuth",
+		scheme = "bearer",
+		bearerFormat = "JWT",
+		type = SecuritySchemeType.HTTP,
+		in = SecuritySchemeIn.HEADER
+)
 public class ZimNewsApplication {
 
 	public static void main(String[] args) {

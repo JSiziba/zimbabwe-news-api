@@ -3,6 +3,8 @@ package com.siziba.zim_news.zim_news.controller;
 import com.siziba.zim_news.zim_news.entity.FileStorage;
 import com.siziba.zim_news.zim_news.exception.CustomServiceException;
 import com.siziba.zim_news.zim_news.service.news.FileStorageService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +17,12 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/files/")
+@Tag(name = "FileStorage", description = "File Storage API")
 public class FileStorageController {
     private final FileStorageService fileStorageService;
 
     @GetMapping("/download/{fileId}")
+    @Operation(summary = "Download file by id")
     public void downloadFile(@PathVariable UUID fileId, HttpServletResponse response) {
         log.info("FileStorageController/downloadFile");
         FileStorage file = fileStorageService.getFile(fileId);
