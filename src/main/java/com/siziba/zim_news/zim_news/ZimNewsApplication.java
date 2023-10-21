@@ -4,8 +4,10 @@ import com.siziba.zim_news.zim_news.entity.ApplicationUser;
 import com.siziba.zim_news.zim_news.repository.ApplicationUserRepository;
 import com.siziba.zim_news.zim_news.service.news.WebScrapperService;
 import com.siziba.zim_news.zim_news.type.Role;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -22,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 		type = SecuritySchemeType.HTTP,
 		in = SecuritySchemeIn.HEADER
 )
+@OpenAPIDefinition(info = @Info(title = "Zim News API", version = "1"))
 public class ZimNewsApplication {
 
 	public static void main(String[] args) {

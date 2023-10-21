@@ -13,6 +13,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -47,8 +48,11 @@ public class WebScrapperServiceImpl implements WebScrapperService {
                     .message(e.getMessage())
                     .build());
         }
-        newsArticleRepository.deleteByPublishedAtBefore(new java.sql.Date(System.currentTimeMillis() - 50L * 24 * 60 * 60 * 1000));
         return Optional.empty();
+    }
+
+    public void deleteOldArticles() {
+        newsArticleRepository.deleteByPublishedAtBefore(new java.sql.Date(System.currentTimeMillis() - 50L * 24 * 60 * 60 * 1000));
     }
 
     public List<NewsArticle> getForTheChronicle() {
