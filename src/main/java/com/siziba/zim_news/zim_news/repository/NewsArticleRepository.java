@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,4 +32,6 @@ public interface NewsArticleRepository extends JpaRepository<NewsArticle, UUID> 
     List<NewsArticle> findByPublicationNotIn(List<Publication> excludedPublications);
 
     boolean existsByArticleUrl(String articleUrl);
+
+    void deleteByPublishedAtBefore(Date date);
 }

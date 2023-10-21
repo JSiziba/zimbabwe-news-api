@@ -47,7 +47,7 @@ public class WebScrapperServiceImpl implements WebScrapperService {
                     .message(e.getMessage())
                     .build());
         }
-
+        newsArticleRepository.deleteByPublishedAtBefore(new java.sql.Date(System.currentTimeMillis() - 50L * 24 * 60 * 60 * 1000));
         return Optional.empty();
     }
 
