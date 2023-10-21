@@ -30,7 +30,7 @@ public class PublicationResponse {
                 .name(publication.getName())
                 .description(publication.getDescription())
                 .url(publication.getUrl())
-                .country(publication.getCountry())
+                .country(publication.getLocation())
                 .logo(FileResponse.builder()
                         .id(publication.getLogo().getId())
                         .fileName(publication.getLogo().getFileName())

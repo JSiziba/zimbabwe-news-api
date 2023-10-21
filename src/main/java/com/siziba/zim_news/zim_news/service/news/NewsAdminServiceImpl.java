@@ -70,7 +70,7 @@ public class NewsAdminServiceImpl implements NewsAdminService {
         Publication publicationToAdd = Publication.builder()
                 .name(publication.getName())
                 .url(publication.getUrl())
-                .country(publication.getCountry())
+                .location(publication.getLocation())
                 .description(publication.getDescription())
                 .build();
         return publicationRepository.save(publicationToAdd);
@@ -95,7 +95,7 @@ public class NewsAdminServiceImpl implements NewsAdminService {
                         .build());
         publicationToUpdate.setName(publication.getName());
         publicationToUpdate.setUrl(publication.getUrl());
-        publicationToUpdate.setCountry(publication.getCountry());
+        publicationToUpdate.setLocation(publication.getLocation());
         publicationToUpdate.setDescription(publication.getDescription());
         return publicationRepository.save(publicationToUpdate);
     }

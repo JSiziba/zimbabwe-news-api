@@ -13,5 +13,5 @@ public class PublicationRequest {
     public String name;
     public String description;
     public String url;
-    public String country;
+    public String location;
 }
