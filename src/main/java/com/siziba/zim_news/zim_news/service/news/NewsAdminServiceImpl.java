@@ -119,7 +119,7 @@ public class NewsAdminServiceImpl implements NewsAdminService {
     @Override
     public List<NewsArticle> runScraper() {
         Optional<List<NewsArticle>> articles = scraperService.runScrapper();
-        return articles.orElse(new ArrayList<NewsArticle>());
+        return articles.orElse(new ArrayList<>());
     }
 
     @Override

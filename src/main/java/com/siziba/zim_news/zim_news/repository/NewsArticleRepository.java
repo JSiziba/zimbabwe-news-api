@@ -3,7 +3,6 @@ package com.siziba.zim_news.zim_news.repository;
 import com.siziba.zim_news.zim_news.entity.NewsArticle;
 import com.siziba.zim_news.zim_news.entity.Publication;
 import com.siziba.zim_news.zim_news.type.NewsArticleCategory;
-import jdk.jfr.Category;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

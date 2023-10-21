@@ -4,7 +4,6 @@ package com.siziba.zim_news.zim_news.controller.auth;
 import com.siziba.zim_news.zim_news.dto.ApiResponse;
 import com.siziba.zim_news.zim_news.dto.auth.AuthenticationRequest;
 import com.siziba.zim_news.zim_news.dto.auth.AuthenticationResponse;
-import com.siziba.zim_news.zim_news.dto.auth.RegistrationRequest;
 import com.siziba.zim_news.zim_news.service.auth.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
