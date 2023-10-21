@@ -1,0 +1,26 @@
+server.port=<port>
+
+server.error.include-message=always
+
+#Enable Multipart File Uploading
+spring.servlet.multipart.enabled=true
+
+#Threshold After Which Files Are Written To Disk
+spring.servlet.multipart.file-size-threshold=20KB
+
+# Max File Size
+spring.servlet.multipart.max-file-size=250MB
+
+# Max Request Size
+spring.servlet.multipart.max-request-size=350MB
+
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=<database url>
+spring.datasource.username=<database username>
+spring.datasource.password=<database password>
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.show-sql= true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+spring.jpa.properties.hibernate.format_sql=true
+
+secret.key = <secret key>
