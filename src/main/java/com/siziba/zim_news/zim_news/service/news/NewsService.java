@@ -11,7 +11,11 @@ import java.util.UUID;
 
 public interface NewsService {
     NewsArticle getNewsArticleById(UUID id);
-    List<NewsArticle> getNewsArticles(NewsArticlesQuery newsArticlesQuery);
+    List<NewsArticle> getPopularArticles();
+    List<NewsArticle> searchForArticles(String searchTerm, int page, int size, DeviceRequest deviceRequest);
+    List<NewsArticle> getArticlesByCategory(String categoryString, int page, int size);
+    List<NewsArticle> getArticles(int page, int size);
+    List<NewsArticle> getArticlesByPublication(String publicationId, int page, int size);
     List<Publication> getPublications();
     Publication getPublicationById(UUID id);
     List<SearchTerm> getLatestSearches();

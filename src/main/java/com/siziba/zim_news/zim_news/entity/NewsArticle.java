@@ -21,15 +21,33 @@ public class NewsArticle {
     private UUID id;
 
     private Long views;
+
     private String title;
+
+    public void setTitle(String title) {
+        this.title = title.substring(0, Math.min(title.length(), 255));
+    }
+
+    @Lob
+    @Column(columnDefinition = "BLOB")
     private String extract;
+
+    @Lob
+    @Column(columnDefinition = "BLOB")
     private String articleUrl;
+
+    @Lob
+    @Column(columnDefinition = "BLOB")
     private String author;
+
+    @Lob
+    @Column(columnDefinition = "BLOB")
     private String pictureUrl;
+
     private java.sql.Date publishedAt;
 
     @Enumerated(EnumType.STRING)
-    private NewsArticleCategory category;
+    private NewsArticleCategory category = NewsArticleCategory.UNKNOWN;
 
     @ManyToOne
     @JoinColumn(name = "publication_id", referencedColumnName = "id")

@@ -11,5 +11,5 @@ public enum NewsArticleCategory {
     WORLD,
     LOCAL,
     OTHER,
-    LIFESTYLE,
+    LIFESTYLE, UNKNOWN,
 }

@@ -6,15 +6,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 public class NewsArticlesQuery {
-    private boolean paginate;
+    private boolean paginate = false;
     private int page;
     private int size;
     private boolean isPopular;
@@ -23,4 +23,16 @@ public class NewsArticlesQuery {
     private UUID publicationId;
     private List<UUID> excludedPublications;
     private DeviceRequest device;
+
+    public NewsArticlesQuery(){
+        this.paginate = false;
+        this.page = 1;
+        this.size = 10;
+        this.isPopular = false;
+        this.searchTerm = null;
+        this.category = null;
+        this.publicationId = null;
+        this.excludedPublications = List.of();
+        this.device = null;
+    }
 }

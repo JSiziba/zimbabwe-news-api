@@ -9,9 +9,17 @@ import com.siziba.zim_news.zim_news.repository.PublicationRepository;
 import com.siziba.zim_news.zim_news.repository.WebScrapperErrorRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -27,8 +35,10 @@ public class WebScrapperServiceImpl implements WebScrapperService {
 
         try {
             List<NewsArticle> forTheChronicle = getForTheChronicle();
-            log.info("Scrapped for The Chronicle and found {} articles", forTheChronicle.size());
-            newsArticleRepository.saveAll(forTheChronicle);
+            log.info("Scrapped for The Chronicle and found {} articles", forTheChronicle != null ? forTheChronicle.size() : 0);
+            if (forTheChronicle != null && !forTheChronicle.isEmpty()) {
+                newsArticleRepository.saveAll(forTheChronicle);
+            }
         }
         catch (Exception e) {
             log.error("Error while scrapping for The Chronicle", e);
@@ -52,7 +62,80 @@ public class WebScrapperServiceImpl implements WebScrapperService {
                     .build());
         }
 
-        return null;
+        List<String> urlsList = List.of(
+                "https://www.chronicle.co.zw/category/s6-demo-section/c37-top-stories/",
+                "https://www.chronicle.co.zw/category/s6-demo-section/c38-local-news/",
+                "https://www.chronicle.co.zw/category/s6-demo-section/c41-business/",
+                "https://www.chronicle.co.zw/category/s6-demo-section/c50-sport/",
+                "https://www.chronicle.co.zw/category/s6-demo-section/c43-entertainment/",
+                "https://www.chronicle.co.zw/category/s6-demo-section/c45-international-news/",
+                "https://www.chronicle.co.zw/category/s6-demo-section/c39-opinion-a-analysis/",
+                "https://www.chronicle.co.zw/category/coronavirus-watch/"
+        );
+
+        List<NewsArticle> newsArticles = new ArrayList<>();
+
+        SimpleDateFormat articlesDateFormat = new SimpleDateFormat("MMMM d, yyyy");
+
+        Publication finalPublication = publication;
+
+        urlsList.forEach(url -> {
+            try {
+                Document document = Jsoup.connect(url).get();
+                Element postItems = document.selectFirst(".main--content .post--items");
+
+                List<Element> articles = Objects.requireNonNull(postItems).select(".post--item");
+
+                articles.forEach(article -> {
+                    Element titleElement = article.selectFirst("h3 a");
+                    Element image = article.selectFirst(".post--img img");
+                    Element extractElement = article.selectFirst(".post--content p");
+                    Element authorElement = article.selectFirst(".post--info .meta a");
+                    List<Element> dateElements = article.select(".post--info .meta a");
+                    Element dateElement = dateElements.get(dateElements.size() - 1);
+
+                    String title = Objects.requireNonNull(titleElement).text();
+                    String articleUrl = Objects.requireNonNull(titleElement).attr("href");
+                    String imageUrl = Objects.requireNonNull(image).attr("src");
+                    String extract = Objects.requireNonNull(extractElement).text();
+                    String author = Objects.requireNonNull(authorElement).text();
+                    String publishedAtDateString = Objects.requireNonNull(dateElement).text();
+
+                    java.sql.Date publishedAt;
+
+                    try {
+                        publishedAt = new java.sql.Date(articlesDateFormat.parse(publishedAtDateString).getTime());
+                    } catch (ParseException e) {
+                        log.error("Error while parsing date", e);
+                       publishedAt = new java.sql.Date(System.currentTimeMillis());
+                    }
+
+
+                    NewsArticle newsArticle = NewsArticle.builder()
+                            .title(title)
+                            .articleUrl(articleUrl)
+                            .pictureUrl(imageUrl)
+                            .extract(extract)
+                            .author(author)
+                            .publishedAt(publishedAt)
+                            .publication(finalPublication)
+                            .build();
+                    boolean exists = newsArticleRepository.existsByArticleUrl(articleUrl);
+                    if (!exists) {
+                        newsArticles.add(newsArticle);
+                    }
+                });
+
+            } catch (IOException e) {
+                log.error("Error while scrapping for The Chronicle", e);
+                webScrapperErrorRepository.save(WebScrapperError.builder()
+                        .publicationName("The Chronicle")
+                        .message(e.getMessage())
+                        .build());
+            }
+        });
+
+        return newsArticles;
     }
 
     public List<NewsArticle> getForTheSundayMail() {

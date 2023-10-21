@@ -2,6 +2,7 @@ package com.siziba.zim_news.zim_news;
 
 import com.siziba.zim_news.zim_news.entity.ApplicationUser;
 import com.siziba.zim_news.zim_news.repository.ApplicationUserRepository;
+import com.siziba.zim_news.zim_news.service.news.WebScrapperService;
 import com.siziba.zim_news.zim_news.type.Role;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -42,6 +43,15 @@ public class ZimNewsApplication {
 				applicationUserRepository.save(admin);
 				log.info("Admin user created");
 			}
+		};
+	}
+
+	@Bean
+	public CommandLineRunner runScrapper(WebScrapperService webScrapperService) {
+		return (args) -> {
+			log.info("Running scrapper");
+			webScrapperService.runScrapper();
+			log.info("Scrapper finished");
 		};
 	}
 

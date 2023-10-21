@@ -25,20 +25,25 @@ public class PublicationResponse {
     public java.sql.Timestamp updatedAt;
 
     public static PublicationResponse from(Publication publication) {
-        return PublicationResponse.builder()
+        PublicationResponse publicationResponse = PublicationResponse.builder()
                 .id(publication.getId())
                 .name(publication.getName())
                 .description(publication.getDescription())
                 .url(publication.getUrl())
                 .country(publication.getLocation())
-                .logo(FileResponse.builder()
-                        .id(publication.getLogo().getId())
-                        .fileName(publication.getLogo().getFileName())
-                        .fileType(publication.getLogo().getFileType())
-                        .build())
+
                 .createdAt(publication.getCreatedAt())
                 .updatedAt(publication.getUpdatedAt())
                 .build();
+
+                if (publication.getLogo() != null) {
+                    publicationResponse.setLogo(FileResponse.builder()
+                            .id(publication.getLogo().getId())
+                            .fileName(publication.getLogo().getFileName())
+                            .fileType(publication.getLogo().getFileType())
+                            .build());
+                }
+                return publicationResponse;
     }
 
     public static List<PublicationResponse> fromList(List<Publication> publications) {

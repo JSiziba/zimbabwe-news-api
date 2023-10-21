@@ -25,6 +25,8 @@ public class SearchTerm {
     @JoinColumn(name = "device_id", referencedColumnName = "id")
     public Device device;
 
+    public Long count;
+
     @CreationTimestamp
     public java.sql.Timestamp createdAt;
 
