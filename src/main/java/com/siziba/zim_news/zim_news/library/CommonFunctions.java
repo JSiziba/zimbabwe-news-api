@@ -1,6 +1,7 @@
 package com.siziba.zim_news.zim_news.library;
 
 import com.siziba.zim_news.zim_news.exception.CustomServiceException;
+import com.siziba.zim_news.zim_news.type.NewsArticleCategory;
 import org.springframework.http.HttpStatus;
 
 public class CommonFunctions {
@@ -71,5 +72,30 @@ public class CommonFunctions {
     public static String sanitizeEmail(String email) {
         email = email.toLowerCase();
         return email;
+    }
+
+    public static void validateIpAddress(String stringIpAddress) {
+        if (!stringIpAddress.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")) {
+            throw  CustomServiceException.builder()
+                    .message("Invalid IP address")
+                    .errorCode(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+    }
+
+    public static NewsArticleCategory setCategory(String category) {
+        return switch (category) {
+            case "SPORTS" -> NewsArticleCategory.SPORTS;
+            case "BUSINESS" -> NewsArticleCategory.BUSINESS;
+            case "ENTERTAINMENT" -> NewsArticleCategory.ENTERTAINMENT;
+            case "HEALTH" -> NewsArticleCategory.HEALTH;
+            case "TECHNOLOGY" -> NewsArticleCategory.TECHNOLOGY;
+            case "SCIENCE" -> NewsArticleCategory.SCIENCE;
+            case "POLITICS" -> NewsArticleCategory.POLITICS;
+            case "LIFESTYLE" -> NewsArticleCategory.LIFESTYLE;
+            case "WORLD" -> NewsArticleCategory.WORLD;
+            case "LOCAL" -> NewsArticleCategory.LOCAL;
+            default -> NewsArticleCategory.OTHER;
+        };
     }
 }

@@ -5,6 +5,7 @@ import com.siziba.zim_news.zim_news.dto.FileRequest;
 import com.siziba.zim_news.zim_news.dto.FileResponse;
 import com.siziba.zim_news.zim_news.dto.device.DeviceRequest;
 import com.siziba.zim_news.zim_news.dto.device.DeviceResponse;
+import com.siziba.zim_news.zim_news.dto.news_article.NewsArticleRequest;
 import com.siziba.zim_news.zim_news.dto.news_article.NewsArticleResponse;
 import com.siziba.zim_news.zim_news.dto.publication.PublicationRequest;
 import com.siziba.zim_news.zim_news.dto.publication.PublicationResponse;
@@ -17,7 +18,6 @@ import com.siziba.zim_news.zim_news.service.auth.ApplicationUserDetailsService;
 import com.siziba.zim_news.zim_news.service.news.NewsAdminService;
 import com.siziba.zim_news.zim_news.type.Role;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,15 +55,15 @@ public class NewsAdminController {
                 .build());
     }
 
-    @PutMapping("/devices")
-    public ResponseEntity<ApiResponse<DeviceResponse>> updateDevice(Principal principal, @RequestBody DeviceRequest device) {
+    @PutMapping("/devices/{id}")
+    public ResponseEntity<ApiResponse<DeviceResponse>> updateDevice(Principal principal, @RequestBody DeviceRequest device, @PathVariable UUID id) {
         log.info("NewsAdminController/updateDevice");
 
         if (!applicationUserDetailsService.isAdmin(principal, Role.ADMIN)) {
             throw new CustomServiceException(HttpStatus.UNAUTHORIZED, "You are not authorized to perform this action");
         }
 
-        Device updatedDevice = newsAdminService.updateDeviceById(device);
+        Device updatedDevice = newsAdminService.updateDeviceById(id, device);
         return ResponseEntity.ok(ApiResponse.<DeviceResponse>builder()
                 .data(DeviceResponse.from(updatedDevice))
                 .success(true)
@@ -166,7 +166,7 @@ public class NewsAdminController {
     }
 
     @PostMapping("/news-articles")
-    public ResponseEntity<ApiResponse<NewsArticleResponse>> addNewsArticle(Principal principal, @RequestBody NewsArticle newsArticle) {
+    public ResponseEntity<ApiResponse<NewsArticleResponse>> addNewsArticle(Principal principal, @RequestBody NewsArticleRequest newsArticle) {
         log.info("NewsAdminController/addNewsArticle");
 
         if (!applicationUserDetailsService.isAdmin(principal, Role.ADMIN)) {
@@ -197,7 +197,7 @@ public class NewsAdminController {
     }
 
     @PutMapping("/news-articles/{id}")
-    public ResponseEntity<ApiResponse<NewsArticleResponse>> updateNewsArticle(Principal principal, @PathVariable UUID id, @RequestBody NewsArticle newsArticle) {
+    public ResponseEntity<ApiResponse<NewsArticleResponse>> updateNewsArticle(Principal principal, @PathVariable UUID id, @RequestBody NewsArticleRequest newsArticle) {
         log.info("NewsAdminController/updateNewsArticle");
 
         if (!applicationUserDetailsService.isAdmin(principal, Role.ADMIN)) {

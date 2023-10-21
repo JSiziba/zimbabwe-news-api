@@ -1,7 +1,9 @@
 package com.siziba.zim_news.zim_news.controller;
 
 import com.siziba.zim_news.zim_news.dto.ApiResponse;
+import com.siziba.zim_news.zim_news.dto.device.DeviceRequest;
 import com.siziba.zim_news.zim_news.dto.news_article.NewsArticleResponse;
+import com.siziba.zim_news.zim_news.dto.news_article.NewsArticlesQuery;
 import com.siziba.zim_news.zim_news.dto.publication.PublicationResponse;
 import com.siziba.zim_news.zim_news.entity.NewsArticle;
 import com.siziba.zim_news.zim_news.entity.Publication;
@@ -10,10 +12,7 @@ import com.siziba.zim_news.zim_news.service.news.NewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,9 +25,9 @@ public class NewsController {
     private final NewsService newsService;
 
     @GetMapping("/articles")
-    public ResponseEntity<ApiResponse<List<NewsArticleResponse>>> getNewsArticles() {
+    public ResponseEntity<ApiResponse<List<NewsArticleResponse>>> getNewsArticles(@RequestBody NewsArticlesQuery newsArticlesQuery) {
         log.info("NewsController/getNewsArticles");
-        List<NewsArticle> newsArticles = newsService.getNewsArticles();
+        List<NewsArticle> newsArticles = newsService.getNewsArticles(newsArticlesQuery);
         return ResponseEntity.ok(ApiResponse.<List<NewsArticleResponse>>builder()
                 .data(NewsArticleResponse.fromList(newsArticles))
                 .success(true)
@@ -44,17 +43,6 @@ public class NewsController {
                 .data(NewsArticleResponse.from(newsArticle))
                 .success(true)
                 .message("News article fetched successfully")
-                .build());
-    }
-
-    @GetMapping("/articles/search/{query}")
-    public ResponseEntity<ApiResponse<List<NewsArticleResponse>>> searchNewsArticles(@PathVariable String query) {
-        log.info("NewsController/searchNewsArticles");
-        List<NewsArticle> newsArticles = newsService.searchNewsArticles(query);
-        return ResponseEntity.ok(ApiResponse.<List<NewsArticleResponse>>builder()
-                .data(NewsArticleResponse.fromList(newsArticles))
-                .success(true)
-                .message("News articles fetched successfully")
                 .build());
     }
 
@@ -80,33 +68,10 @@ public class NewsController {
                 .build());
     }
 
-    @GetMapping("/publications/{id}/articles")
-    public ResponseEntity<ApiResponse<List<NewsArticleResponse>>> getNewsArticlesByPublicationId(@PathVariable UUID id) {
-        log.info("NewsController/getNewsArticlesByPublicationId");
-        List<NewsArticle> newsArticles = newsService.getNewsArticlesByPublicationId(id);
-        return ResponseEntity.ok(ApiResponse.<List<NewsArticleResponse>>builder()
-                .data(NewsArticleResponse.fromList(newsArticles))
-                .success(true)
-                .message("News articles fetched successfully")
-                .build());
-    }
-
-    @GetMapping("/searches")
-    public ResponseEntity<ApiResponse<List<String>>> getUserRecentSearches() {
-        log.info("NewsController/getUserRecentSearches");
-        List<SearchTerm> searches = newsService.getUserRecentSearches();
-        List<String> searchTerms = searches.stream().map(SearchTerm::getTerm).toList();
-        return ResponseEntity.ok(ApiResponse.<List<String>>builder()
-                .data(searchTerms)
-                .success(true)
-                .message("Searches fetched successfully")
-                .build());
-    }
-
     @GetMapping("/top-searches")
     public ResponseEntity<ApiResponse<List<String>>> getTopSearches() {
         log.info("NewsController/getTopSearches");
-        List<SearchTerm> searches = newsService.getTopSearches();
+        List<SearchTerm> searches = newsService.getLatestSearches();
         List<String> searchTerms = searches.stream().map(SearchTerm::getTerm).toList();
         return ResponseEntity.ok(ApiResponse.<List<String>>builder()
                 .data(searchTerms)
@@ -116,9 +81,9 @@ public class NewsController {
     }
 
     @GetMapping("/articles/{id}/like")
-    public ResponseEntity<ApiResponse<Long>> toggleLike(@PathVariable UUID id) {
+    public ResponseEntity<ApiResponse<Long>> toggleLike(@PathVariable UUID id, @RequestBody DeviceRequest deviceRequest) {
         log.info("NewsController/toggleLike");
-        Long likes = newsService.toggleLike(id);
+        Long likes = newsService.toggleLike(id, deviceRequest);
         return ResponseEntity.ok(ApiResponse.<Long>builder()
                 .data(likes)
                 .success(true)

@@ -13,4 +13,5 @@ public class DeviceRequest {
     private String macAddress;
     private String ipAddress;
     private String deviceInfo;
+
 }

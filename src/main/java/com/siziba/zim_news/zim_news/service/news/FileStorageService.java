@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface FileStorageService {
     FileStorage saveFile(FileRequest fileRequest);
     FileStorage getFile(UUID fileId);
+
+    void deleteFile(UUID id);
 }

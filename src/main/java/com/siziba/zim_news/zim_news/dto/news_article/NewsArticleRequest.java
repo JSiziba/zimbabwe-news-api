@@ -19,6 +19,7 @@ public class NewsArticleRequest {
     private String author;
     private UUID publicationId;
     private String publishedAt;
-    private String imageUrl;
+    private String pictureUrl;
     private String articleUrl;
+    private String category;
 }
