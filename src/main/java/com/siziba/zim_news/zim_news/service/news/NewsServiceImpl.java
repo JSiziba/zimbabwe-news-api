@@ -157,7 +157,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<SearchTerm> getLatestSearches() {
-        return searchTermRepository.findTop5OrderByCreatedAtDesc();
+        return searchTermRepository.findTop5ByOrderByCreatedAtDesc();
     }
 
     @Override
